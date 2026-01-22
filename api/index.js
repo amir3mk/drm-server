@@ -1,11 +1,23 @@
 export default function handler(req, res) {
+    // إعدادات CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Content-Type', 'application/json');
 
+    // 1. كلمة السر الخاصة بك (غيرها لأي حاجة صعبة)
+    const MY_SECRET_PASSWORD = "Amir-Vip-2026-Secret";
+
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
+    }
+
+    // 2. التحقق من كلمة السر القادمة من التطبيق
+    const authHeader = req.headers['x-app-auth'];
+    
+    if (authHeader !== MY_SECRET_PASSWORD) {
+        // لو كلمة السر غلط أو مش موجودة، اطرده
+        return res.status(403).json({ error: "Access Denied: App Only" });
     }
 
     try {
